@@ -1,0 +1,104 @@
+br tag : 줄바꿈을 몇 번 한다는 시각적인 것(p로 나누는 게 좋음)
+=====================================================
+p  tag : 같은 단락을 묶어줬기 때문에 하나의 정보를 주고
+	 싶을 경우에 사용
+=====================================================
+img : img src="이미지.jpg"alt="산이미지"
+		= alternative 대체 이미지
+====================================================
+table : 이름 	성별	주소
+			윤정인	여	창원
+			이준석 	남 	부산
+=====================================================
+colspan="3" 3행 병합(세로)
+만들어져있는 td의 td 개수만큼 삭제
+rowspan="2" 2열 병합(가로)
+병합되는 열의 td의 td 개수만큼 삭제
+=====================================================
+form : id, password, address 등 swing처럼 화면 구성
+서버의 기본적인 모습 구성해보는 첫 걸음
+
+	------- ACTION --------
+form action = "홈페이지 주소.php/java/python etc"
+
+	------- TEXT --------
+text : <input type="타입"name="구별할 이름"value="들어갈 값">
+password
+textarea
+	------- BUTTON --------
+<input type="button"value="button"onclick="alert()">
+<input type="reset"value="reset">
+<input type="submit"value="send">
+
+	------- CHOICE --------
+<form action="http:localhost/color.php">
+<h1>color</h1>
+<select name="color">			: 선택할 항목의 이름
+<option value="red">red</option>	: 속성 - 이름
+<option value="blue">blue</option>
+<option value="yellow">yellow</option>
+</form>
+
+	---- MULTIPLE CHOICE ----
+<h1>multiple selection</h1> : 다중 항목 선택 가능
+<select name="color" multiple>  기본 + multiple
+	<option value="red">red</option>
+	<option value="blue">blue</option>
+	<option value="yellow">yellow</option>
+
+	------- CHOICE --------
+<p>를 사용해서 이름이 같은 값끼리 묶어서 선택 가능함
+<p>
+<h1>size(multiple selection)</h1> : 다중 선택 가능
+95 : <input type="checkbox"name="size"value="95">  : 네모 체크박스
+100 : <input type="checkbox"name="size"value="100"checked> : 체크 ON
+105 : <input type="checkbox"name="size"value="105"checked>	: ON
+<input type="radio" name="color">	:	동그라미 체크박
+<input type="radio" name="color">
+<input type="radio" name="color">
+</p>
+
+	------- LABLE --------
+lable : 어떤 것의 라벨링이 돼있음을 알림(정보 묶음) + 라벨을 눌렸을 때도 체크 ON
+
+라벨링을 해서 특정 id값을 위해서 사용되는 라벨임을 지정한 후, 그 라벨 안에 넣어줌
+input 안에는 그 라벨에 해당하는 id값을 추가해줌
+<lable for="id_txt">text</lable>:
+<input id="id_txt"type="text"name="id"value="dafault value">
+
+	------- HIDDEN --------
+URL로 전송할 때도 있지만, 어떤 정보를 감춰서 전송할 방식도 필요함
+//  URL로 전송 : 정보를 숨기지 않음
+	<form action="http://localhost/method.php"method="get">
+// 숨겨서 전송, form은 거의 숨겨서 전송함
+	<form action="http://localhost/method.php"method="post">
+		<input type="text"name="id">
+		<input type="password"name="pwd">
+		<input type="text"name="id">
+		<input type="submit">
+
+	-------- FILE ---------
+
+
+=====================================================
+<header>
+웹페이지의 중요한 정보(거의전체)가 표현되고 있음을 의미
+- 어떠한 기능은 없음
+</header>
+
+<nav>
+웹페이지를 탐색하는 네비게이션 역할
+- 내부 역할 : 문서의
+</nav>
+
+<section>
+<article>
+본문에 쓰일 문단들
+</article>
+</section>
+
+<footer> : 웹사이트 하단 쪽에 부가적인 링크나 정보 표현
+<ul>
+<li><a href="privacy.html">개인보호정책</a>/<li>
+</ul>
+</footer>
