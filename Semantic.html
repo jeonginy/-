@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Sections</title>
+<style>
+	header, nav, main, aside, footer {
+		border: 1px solid black;
+	}
+
+	main {
+		display:flex;
+	}
+
+	aside {
+		flex-grow: 1;
+	}
+	
+	article {
+		flex-grow: 2;
+	}
+
+	img {
+		max-height: 100px;
+	}
+	
+	li {
+		display: inline-block;
+	}
+</style>
+</head>
+<body>
+	<header>
+		<img src="logo.png"/><h1>Welcome~ It's header</h1>
+	</header>
+	<nav>
+		<ul>
+			<li>navigation section : </li>
+			<li>content</li>
+			<li>content</li>
+		</ul>
+	</nav>
+	<main>
+		<aside><p>another content<p></aside>
+		<article>
+			<section>
+				<h1>Section Title</h1>
+				<p>content</p>
+				<p>content</p>
+				<p>content</p>
+			</section>
+			<section>
+				<h1>other sections</h1>
+				<p>content</p>
+				<p>content</p>
+			</section>
+		</article>	
+	</main>
+	<footer>
+		<address>Address : Seoul, in Korea</address>
+	</footer>
+</body>
+</html>
