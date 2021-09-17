@@ -16,4 +16,4 @@
 	//	해당하는 키를 member 값으로 설정 
 	request.setAttribute("member", member);
 %>
-<jsp:forward page="/05-useObject.jsp" />
+<jsp:forward page="/useObject.jsp" />
