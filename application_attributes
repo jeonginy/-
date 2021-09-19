@@ -1,0 +1,31 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%
+	String name = request.getParameter("name");
+	String value = request.getParameter("value");
+	
+	if(name != null){
+		application.setAttribute(name, value);
+	}
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert name & value into URL</title>
+</head>
+<body>
+<%
+	if(name != null && value != null){
+%>
+	Set the primary object attributes of application :
+<%= name%> = <%=value %>
+<%
+	} else {
+%>
+	No primary object attributes of application 
+<%
+	}
+%>
+</body>
+</html>
