@@ -1,0 +1,27 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page import="java.net.URLEncoder" %>
+<% 
+	Cookie cookie = new Cookie("name", URLEncoder.encode("Jeong_in", "utf-8"));
+//	한글을 표현하기 위해서 인코더로 인코딩한 값을 넣어줘야 함 
+//	쿠키를 보관할 기간을 정해주는 메서드 setMaxAge(0)이면, 더이상 유효하지 않은 쿠키로 인식
+//	request를 했을 때, 조금 더 넓은 방식으로 정보를 저장하고 싶을 때 : 쿠키 쓰기 
+/*
+	When Server reponses a request which is from Client, saves information with storage which is assigned
+	cookie is available for 24 hour
+*/	
+	cookie.setMaxAge(60 * 60 * 24);
+	response.addCookie(cookie);
+/*  use reponse method to add cookie 
+	응답에 실어서 쿠키를 보내주면 쿠키에 정보를 저장함 */
+ %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Create Cookie</title>
+</head>
+<body>
+	<%= cookie.getName() %> cookie's value = "<%=cookie.getValue() %>"
+</body>
+</html>
