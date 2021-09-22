@@ -1,0 +1,30 @@
+<%@page import="java.net.URLDecoder"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>The length of String</title>
+</head>
+<body>
+	<%
+		String str = "";
+		Cookie[] cookies = request.getCookies();
+		if (cookies != null && cookies.length > 0) {
+			for (Cookie c : cookies) {
+				if (c.getName().equals("str")) {
+					str = URLDecoder.decode(c.getValue(), "utf-8");
+				}
+			}
+		}
+	%>
+	<form action="04-string-process.jsp" method="post">
+		<input type="text" name="str" placeholder="Type anything" value="<%= str %>">
+		<div>
+			<input type="checkbox" name="save-cookie" value="ok">Remember
+		</div>
+		<input type="submit">
+	</form>
+</body>
+</html>
