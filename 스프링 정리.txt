@@ -1,0 +1,140 @@
+			**** 설정 - java code 로 하는 방식과 xml 로 지정해주는 방식 2가지가 있음 ****
+				(Spring Bean객체를 사용하기 위해서 설정은 무조건 해줘야 함)
+
+		     pom.xml : maven프로젝트 설정할 때 필요
+ @Controller : 처리한 로직들을 Servlet에게 알려줘야 함 -> View에 전달 -> 해당하는 view file 가져옴 -> Servlet은 request, response 처리
+(mapping 해야 되는 주소 + 수행해야 될 로직 작성 예 : addAttribute, session 변경, 데이터베이스 연결 등)   
+	- handler가 servlet에게 보여줘야 되는 view이름을 반환해줌
+- view에 해당하는 파일 요청함 
+	- servlet이 해당 이름 jsp로 response를 통해 이동시켜줌
+
+	@RequestMapping(value="경로", method = RequestMethod.GET(POST))
+	public type name(parameter){
+	return "보여줄 페이지 이름";
+	} 
+
+1. Maven Project >> Architecture type : internal >> package name + project name >> ok
+   설정 : pom.xml 기본적으로 1.5로 설정돼있는 걸 1.8로 변경시켜야함 
+
+	1) <properties> 안에 <maven.complier.source>1.8</maven.complier.source>
+  		<maven.complier.target>1.8</maven.complier.target>
+	
+						    2) <plugins>안에 plugin 기능 추가 
+		<build>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>2.5.1</version>
+					<configuration>
+						<source>1.8</source>
+						<target>1.8</target>
+						<compilerArgument>-Xlint:all</compilerArgument>
+						<showWarnings>true</showWarnings>
+						<showDeprecation>true</showDeprecation>
+					</configuration>
+				</plugin>
+			</plugins>
+		</build>
+					3) 우클릭 >> maven >> update maven or option + 5
+					4) 의존성 추가(dependencies) : spring framework / spring beans / spring core(5.3.10) - 3개 버전이 일치 해야함 		
+					->  <properties> 안에 변수 생성해서 version에 적어서 맞출수 
+					->  <spring-version>5.3.10</spring-version> ->>  ${ spring-version }
+				     5) 빈(Bean) 만들기 : spring bean configuration file >> .xml 파일로 만들기 >> bean으로 등록할 객체 클래스 생성(java)
+					>> xml파일에 id에 이름 정하고, 패키지+클래스 이름 = class에 넣기(bean등록)
+	----------------- 또다른 bean 생성 방법  ------------------------------------------------------------
+			      java code로 @Configuation 을 사용해서 bean 등록도 가능 (.xml 파일 말고)
+			      @Configuration
+						public class MyConfig {
+								@Bean
+								@Bean(name = { "myList", "yourList"}) : 특정한 이름으로 등록 가능
+								@Scope("prototype")	- Bean 과 같이 Scope 설정 가능
+								public List<Integer> myList(){
+								return new ArrayList<Integer>(Arrays.asList(1, 2, 3, 4, 5));
+	
+	----------------------------------	 CORE 라는 행동	  -----------------------------------------------
+	6-1) Bean 객체가 있는 context 를 담을 변수 생성 후 bean.xml 경로 넣어서 초기화
+		ApplicationContext context =
+						 new ClassPathXmlApplicationContext("kr/co/greenart/config/mybean.xml");
+
+			 6-2) Bean 으로 등록 돼있는 객체 클래스 변수 생성 후, context 객체 메서드를 사용해서 가져오기 - app.java
+			MyPackage m1 = (MyPackage) context.getBean("practiceBean");
+			MyPackage m2 = context.getBean(MyPackage.class);
+
+	6-3) Bean 의 별명을 지어줄 수 있음(alias = 가명) - bean.xml
+			<alias name="practiceBean" alias="anotherOne"></alias>
+					MyPackage m3 = (MyPackage) context.getBean("anotherOne");
+
+ 	7) Configuration 설정 : 등록할 정보들을 @Configuration밑에 넣고 Bean 으로 등록(@Bean)
+						->  ApplicationContext context = new 	AnnotationConfigApplicationContext(MyConfig.class);
+
+	 @Component 를 사용해 bean 등록 후 꺼냄 -> Configuration설정 : xml파일 생성 후, context 추가(component-scan가능)
+		<context:component-scan base-package="kr.co.greenart.mypackage"></context:component-scan>
+
+** component-scan : component로 등록돼 있는 객체를 찾아서 Bean으로 등록
+** base-package : Bean으로 등록하려고 하는 객체들이 모여있는 패키지 
+** Component가 설정돼 있는 클래스이름으로 객체 생성(reflection)
+MyPackageScan mypackagescan = context.getBean(MyPackageScan.class);
+
+@Component(value="원하는 이름")	으로 이름 지정도 가능 
+	
+-----------------------------------------------------------------------------------------------------------------------------
+ViewResolver : view 관리 /WEB-INF/views에 있는 /.jsp 파일 관리
+Homecontroller 에서 return받은 이름과 똑같은 이름의 jsp 파일을 찾음 
+									<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+									<beans:property name="prefix" value="/WEB-INF/views/" />
+												<beans:property name="suffix" value=".jsp" />
+									</beans:bean>
+Controller = Component bean으로 등록할 개체 : 사용자의 요청을 다뤄줄 수 있는 용도의 Component
+프로그램에서 Home-controller를 Bean 객체로 만들어 두고 계속 돌려씀 
+(설정에 의해서 Bean 으로 등록돼있을 경우에 모든 해동 가능)
+web.xml에 등록돼있는 'appServlet'이 사용자의 모든 요청을 다 mapping해서 처리함 
+Dispatcher Servlet은 등록된 bean들을 알고 있고, mapping돼있는 주소들을 확인해 사용자가 원하는 경로의 Handler를 찾아서 
+작업을 수행하고, 문자열을 반환받고, view-Resolver에게 해당하는 view를 보여달라 요청(request)
+ 
+				<!-- Processes application requests -->
+					<servlet>
+			<servlet-name>appServlet</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet
+					</servlet-class>
+					<init-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>/WEB-INF/spring/appServlet/servlet-context.xml
+	</param-value>
+	</init-param>
+	<load-on-startup>1</load-on-startup>
+	</servlet>
+
+		<servlet-mapping>
+		<servlet-name>appServlet</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+
+                        <   DispatcherSevlet    >   
+          
+                     <   Sevlet WebApplicationContext    >
+                   Controller / ViewResolver / HandlerMapping  
+
+                     <   Root WebApplicationContext   >
+                             Service / Repositories
+
+---------------------------------------------------------------------------------------------
+
+***** 이클립스에서 생성해주는 dependencies 말고 직접 설정해기 *****
+Maven Project ->> Internal catalog >> web.app 
+			<properties>
+																<maven.compiler.source>1.8</maven.compiler.source>
+																<maven.compiler.target>1.8</maven.compiler.target>
+															</properties>
+dependencies 가 추가 안돼있어서 추가해줘야 함
+						- Java Servlet API / slf4j 1.7.32 / slf4j-api 1.7.32 / log4j 1.2.17
+- Source folder 추가 -> folder
+- scr/main 안에 java 만들어주기 
+folder로 만들고, Builder Path >> use as a source folder 클릭
+
+
+설정파일 Web.xml이 켜지고 Dispatcher가 실행 -> 컴포턴트들을 빈으로 등록하려고 함(Controller/Dao) -> Bean 데이터베이스랑 연결하기 위해 객체 생성이 필요함 -> 한 번만의 객체 생성으로 관리 가능 
+
+
+
+
